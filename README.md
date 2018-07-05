@@ -1,6 +1,7 @@
 ## Tapper's formula
 
 > Tupper's self-referential formula is a formula that visually represents itself when graphed at a specific location in the (x, y) plane.
+>
 > *[Wikipedia](https://en.wikipedia.org/wiki/Tupper%27s_self-referential_formula).*
 
 ### Usage
