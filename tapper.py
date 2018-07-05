@@ -19,7 +19,6 @@ def get_image(chosen_k, chosen_image_path):
             result[-x % _SIZE_HEIGHT].append(binary[x])
         return result
 
-
     if chosen_k is None:
         logging.error('Undefined k')
         return
@@ -107,7 +106,8 @@ using Tapper\'s formula'
     args = parser.parse_args()
 
     #-----Setting logging level-----#
-    logging.root.setLevel(logging.INFO)
+    FORMAT = '%(filename)s:%(lineno)d:%(levelname)-6s %(message)s'
+    logging.basicConfig(format=FORMAT, level=logging.INFO)
 
     if args.gen == args.count:
         logging.info('Use --help')
