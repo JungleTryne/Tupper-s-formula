@@ -14,7 +14,7 @@ k will be returned.
 
 #### Get image from 'k'
 
-Use `--k <K>` with 'k' (integer) to generate image.
+Use `-k <K>` with 'k' (integer) to generate image.
 
 Example:
 ```bash
