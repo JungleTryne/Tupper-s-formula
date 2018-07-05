@@ -77,47 +77,48 @@ using Tapper\'s formula'
     )
 
     parser.add_argument(
-        '--type',
-        type=str,
-        default=None,
-        help="set type: 'gen' or 'count'",
+        '-g', '--gen',
+        action='store_true',
+        help='generate image',
     )
     parser.add_argument(
-        '--k',
+        '-c', '--count',
+        action='store_true',
+        help='count \'k\'',
+    )
+    parser.add_argument(
+        '-k',
         type=int,
         default=None,
-        help="set k to generate image",
+        help='set \'k\' to generate image',
     )
     parser.add_argument(
-        '--path',
+        '-p', '--path',
         type=str,
         default=None,
-        help="set image path to get k",
+        help='set image path to get k',
     )
     parser.add_argument(
         '-o',
         type=str,
         default=None,
-        help="set path for generated image",
+        help='set path for generated image',
     )
-    chosen_type = parser.parse_args().type
-    chosen_k = parser.parse_args().k
+    args = parser.parse_args()
 
     #-----Setting logging level-----#
     logging.root.setLevel(logging.INFO)
 
-    if not chosen_type:
+    if args.gen == args.count:
         logging.info('Use --help')
         logging.error('Undefined type')
         return
 
     #-----Choose type-----#
-    if chosen_type == 'count':
-        chosen_image_path = parser.parse_args().path
-        result = get_k(chosen_image_path)
-    elif chosen_type == 'gen':
-        chosen_image_path = parser.parse_args().o
-        result = get_image(chosen_k, chosen_image_path)
+    if args.count:
+        result = get_k(args.path)
+    elif args.gen:
+        result = get_image(args.k, args.o)
 
     #-----Returning result-----#
     print(result)
