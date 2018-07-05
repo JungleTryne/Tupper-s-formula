@@ -7,18 +7,16 @@ import logging
 
 _SIZE_WIDTH = 106
 _SIZE_HEIGHT = 17
+_SQ = _SIZE_HEIGHT * _SIZE_WIDTH
 
 
 def get_image(chosen_k, chosen_image_path):
     def from_k_to_bin(k):
-        k //= 17
-
-        binary = '0' * (1802 - len(bin(k)[2:])) + bin(k)[2:]
-
-        result = [[] for i in range(17)]
-        for x in range(1802):
-            result[x % 17].append(binary[x])
-
+        k //= _SIZE_HEIGHT
+        binary = bin(k)[2:].rjust(_SQ, '0')
+        result = [[] for i in range(_SIZE_HEIGHT)]
+        for x in range(_SQ):
+            result[x % _SIZE_HEIGHT].append(binary[x])
         result.reverse()
         return result
 
@@ -47,7 +45,6 @@ def get_image(chosen_k, chosen_image_path):
 def get_k(chosen_image_path):
     if chosen_image_path is None:
         logging.error('Undefined image path')
-
     try:
         image = Image.open(chosen_image_path)
     except:
@@ -110,10 +107,7 @@ using Tapper\'s formula'
     logging.root.setLevel(logging.INFO)
 
     if not chosen_type:
-        logging.info(
-            'Use --help'
-        )
-
+        logging.info('Use --help')
         logging.error('Undefined type')
         return
 
