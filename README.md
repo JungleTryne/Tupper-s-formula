@@ -15,6 +15,7 @@ Example:
 python3 tapper.py --count --path src/igoose1.png
 ```
 `k` will be returned.
+
 ![hello-world](https://raw.githubusercontent.com/igoose1/Tapper-s-formula/master/src/igoose1.png)
 
 Result:
