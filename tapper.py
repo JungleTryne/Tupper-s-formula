@@ -16,9 +16,9 @@ def get_image(chosen_k, chosen_image_path):
         binary = bin(k)[2:].rjust(_SQ, '0')
         result = [[] for i in range(_SIZE_HEIGHT)]
         for x in range(_SQ):
-            result[x % _SIZE_HEIGHT].append(binary[x])
-        result.reverse()
+            result[-x % _SIZE_HEIGHT].append(binary[x])
         return result
+
 
     if chosen_k is None:
         logging.error('Undefined k')
