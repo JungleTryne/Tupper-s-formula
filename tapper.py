@@ -59,8 +59,7 @@ def get_k(chosen_image_path):
     byteset = ""
     for x in range(_SIZE_WIDTH - 1, -1, -1):
         for y in range(_SIZE_HEIGHT):
-            byte = str(image.getpixel((x, y)))
-            byteset += str(int(byte == '255'))
+            byteset += str(int(image.getpixel((x, y)) >= 128))
     k = int(byteset, 2) * 17
 
     logging.debug('k has counted')
