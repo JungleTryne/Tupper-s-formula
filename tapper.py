@@ -1,120 +1,133 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PIL import Image, ImageDraw
+from PIL import Image
+from argparse import ArgumentParser
+import logging
 
 _SIZE_WIDTH = 106
 _SIZE_HEIGHT = 17
 
-def welcome() -> None:
-	print("Расшифровка числа по формуле Таппера")
-	print("Mishin Dev Studio 2018 (c)")
+
+def get_image(chosen_k, chosen_image_path):
+    def from_k_to_bin(k):
+        k //= 17
+
+        binary = '0' * (1802 - len(bin(k)[2:])) + bin(k)[2:]
+
+        result = [[] for i in range(17)]
+        for x in range(1802):
+            result[x % 17].append(binary[x])
+
+        result.reverse()
+        return result
+
+    if chosen_k is None:
+        logging.error('Undefined k')
+        return
+
+    lists = from_k_to_bin(chosen_k)
+
+    #-----Drawing-----#
+    image = Image.new("1", (_SIZE_WIDTH, _SIZE_HEIGHT), (0))
+    for y in range(_SIZE_HEIGHT):
+        for x in range(_SIZE_WIDTH):
+            xy = (_SIZE_WIDTH - x - 1, _SIZE_HEIGHT - y - 1)
+            image.putpixel(xy=xy, value=(int(lists[y][x]),))
+
+    #-----Saving-----#
+    if chosen_image_path is None:
+        chosen_image_path = 'result.png'
+
+    image.save(chosen_image_path)
+    logging.debug('Image has generated')
+    return chosen_image_path
 
 
-def get_image() -> None:
+def get_k(chosen_image_path):
+    if chosen_image_path is None:
+        logging.error('Undefined image path')
 
-	#---------------Subfunc-----------------#
+    try:
+        image = Image.open(chosen_image_path)
+    except:
+        logging.error('Image error')
+        return
 
-	def get_k() -> int:
-		return int(input("Введите k:"))
+    if image.size != (_SIZE_WIDTH, _SIZE_HEIGHT):
+        logging.error("An image has to be 106х17")
+        return
 
+    #-----Counting-----#
+    image = image.convert('1')
+    byteset = ""
+    for x in range(_SIZE_WIDTH - 1, -1, -1):
+        for y in range(_SIZE_HEIGHT):
+            byte = str(image.getpixel((x, y)))
+            byteset += str(int(byte == '255'))
+    k = int(byteset, 2) * 17
 
-	def from_k_to_bin(k: int) -> list:
-		k //= 17
-		binary = bin(k)[2:]
-
-		if len(binary) < 1802:
-			new_binary = ""
-			for i in range(1802-len(binary)):
-				new_binary += "0"
-			binary = new_binary + binary
-
-		lists = [[] for x in range(17)]
-		for x in range(1802):
-			lists[x%17].append(binary[x])
-
-		lists.reverse()
-		return lists
-
-	#---------------------------------------#
-
-	k = get_k() #unsafe
-	lists = from_k_to_bin(k)
-
-	#-----Рисовашки!-----#
-	image = Image.new("1", (106,17), (0))
-	draw = image.load()
-	for y in range(17):
-		for x in range(106):
-			image.putpixel(xy = (105-x,16-y), value = (int(lists[y][x]),))
-	image.save("image.png")
-
-
-def generate_image() -> None:
-
-	#---------------Subfunc-----------------#
-
-	def attention() -> None:
-		print("Внимание! Изображение должно быть сторого разрешения 106х17 пикселей!")
-
-
-	def get_image() -> Image:
-		name = input("Введите название изображения (должно находится в одной папке со скриптом):")
-		try:
-			im = Image.open(name)
-		except Exception:
-			print("Неудача!")
-			exit(0)
-
-		return im
-
-	#---------------------------------------#
-
-	attention()
-	image = get_image()
-	width, height = image.size
-
-	flag_okay = False
-	if width == _SIZE_WIDTH and height == _SIZE_HEIGHT:
-		flag_okay = True
-
-	if not flag_okay:
-		print("Недопустимый размер изображения")
-		print(width, height)
-		exit(0)
-
-	print("Все ок!")
-	image = image.convert('1')
-	image.save('result.png')
-
-	byteset = ""
-	for x in range(105,-1,-1):
-		for y in range(0,17):
-			byte = str(image.getpixel((x,y)))
-			if byte == "255":
-				byteset += '1'
-			else:
-				byteset += '0'
-
-	k = int(byteset,2)*17
-
-	print("Все готово:")
-	print(k)
-	
+    logging.debug('k has counted')
+    return k
 
 
 def main():
-	welcome()
-	print("Из k получить изображение (0) или из изображения получить k (1) ?")
-	choice = int(input())
-	if choice > 1:
-		main()
-	else:
-		if choice == 0:
-			get_image()
-		else:
-			generate_image()
+    #-----Parsing arguments-----#
+    parser = ArgumentParser(
+        description='Script for generating image from \'k\' \
+and getting \'k\' from image \
+using Tapper\'s formula'
+    )
+
+    parser.add_argument(
+        '--type',
+        type=str,
+        default=None,
+        help="set type: 'gen' or 'count'",
+    )
+    parser.add_argument(
+        '--k',
+        type=int,
+        default=None,
+        help="set k to generate image",
+    )
+    parser.add_argument(
+        '--path',
+        type=str,
+        default=None,
+        help="set image path to get k",
+    )
+    parser.add_argument(
+        '-o',
+        type=str,
+        default=None,
+        help="set path for generated image",
+    )
+    chosen_type = parser.parse_args().type
+    chosen_k = parser.parse_args().k
+
+    #-----Setting logging level-----#
+    logging.root.setLevel(logging.INFO)
+
+    if not chosen_type:
+        logging.info(
+            'Use --help'
+        )
+
+        logging.error('Undefined type')
+        return
+
+    #-----Choose type-----#
+    if chosen_type == 'count':
+        chosen_image_path = parser.parse_args().path
+        result = get_k(chosen_image_path)
+    elif chosen_type == 'gen':
+        chosen_image_path = parser.parse_args().o
+        result = get_image(chosen_k, chosen_image_path)
+
+    #-----Returning result-----#
+    print(result)
 
 
 if __name__ == '__main__':
-	main()
+    main()
