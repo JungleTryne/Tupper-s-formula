@@ -38,7 +38,6 @@ Result will be a created image name (by default `result.png`).
 
 Image will be created in script's folder.
 You can use `-o <PATH>` to change name.
-
 Example:
 ```bash
 python3 tapper.py --gen -k 1234 -o /tmp/image.png
