@@ -10,6 +10,44 @@ _SIZE_HEIGHT = 17
 _SQ = _SIZE_HEIGHT * _SIZE_WIDTH
 
 
+def get_parser():
+    result = ArgumentParser(
+        description='Script for generating image from \'k\' \
+and getting \'k\' from image \
+using Tapper\'s formula'
+    )
+
+    result.add_argument(
+        '-g', '--gen',
+        action='store_true',
+        help='generate image',
+    )
+    result.add_argument(
+        '-c', '--count',
+        action='store_true',
+        help='count \'k\'',
+    )
+    result.add_argument(
+        '-k',
+        type=int,
+        default=None,
+        help='set \'k\' to generate image',
+    )
+    result.add_argument(
+        '-p', '--path',
+        type=str,
+        default=None,
+        help='set image path to get k',
+    )
+    result.add_argument(
+        '-o',
+        type=str,
+        default=None,
+        help='set path for generated image',
+    )
+    return result
+
+
 def get_image(chosen_k, chosen_image_path):
     def from_k_to_bin(k):
         k //= _SIZE_HEIGHT
@@ -67,52 +105,18 @@ def get_k(chosen_image_path):
 
 def main():
     #-----Parsing arguments-----#
-    parser = ArgumentParser(
-        description='Script for generating image from \'k\' \
-and getting \'k\' from image \
-using Tapper\'s formula'
-    )
-
-    parser.add_argument(
-        '-g', '--gen',
-        action='store_true',
-        help='generate image',
-    )
-    parser.add_argument(
-        '-c', '--count',
-        action='store_true',
-        help='count \'k\'',
-    )
-    parser.add_argument(
-        '-k',
-        type=int,
-        default=None,
-        help='set \'k\' to generate image',
-    )
-    parser.add_argument(
-        '-p', '--path',
-        type=str,
-        default=None,
-        help='set image path to get k',
-    )
-    parser.add_argument(
-        '-o',
-        type=str,
-        default=None,
-        help='set path for generated image',
-    )
+    parser = get_parser()
     args = parser.parse_args()
 
     #-----Setting logging level-----#
     FORMAT = '%(filename)s:%(lineno)d:%(levelname)-6s %(message)s'
     logging.basicConfig(format=FORMAT, level=logging.INFO)
 
+    #-----Choose type-----#
     if args.gen == args.count:
         logging.info('Use --help')
         logging.error('Undefined type')
         return
-
-    #-----Choose type-----#
     if args.count:
         result = get_k(args.path)
     elif args.gen:
