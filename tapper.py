@@ -33,8 +33,7 @@ def get_image(chosen_k, chosen_image_path):
             image.putpixel(xy=xy, value=(int(lists[y][x]),))
 
     #-----Saving-----#
-    if chosen_image_path is None:
-        chosen_image_path = 'result.png'
+    chosen_image_path = chosen_image_path or 'result.png'
 
     image.save(chosen_image_path)
     logging.debug('Image has generated')
