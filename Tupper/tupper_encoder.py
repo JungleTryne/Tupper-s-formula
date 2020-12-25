@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 
-from tupper_constants import IMAGE_MODE, WIDTH, HEIGHT, \
+from Tupper.tupper_constants import IMAGE_MODE, WIDTH, HEIGHT, \
     AREA, SIZE_TUPLE, TWO_COLOR_MODE, BLACK_COLOR_CODE
 
 

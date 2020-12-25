@@ -1,8 +1,8 @@
 import argparse
 import traceback
 
-from tupper_encoder import TupperEncoder
-from tupper_decoder import TupperDecoder
+from Tupper.tupper_encoder import TupperEncoder
+from Tupper.tupper_decoder import TupperDecoder
 
 
 def print_help():
@@ -23,7 +23,7 @@ def encode(input_path, output_path):
         return
 
     with open(output_path, 'w+') as f:
-        f.write(result) 
+        f.write(str(result)) 
 
 
 def decode(input_path, output_path):
