@@ -64,7 +64,7 @@ class TupperDecoder:
                 pixel_value = (int(image_lists[y][x],))
 
                 image.putpixel(
-                    xy=(WIDTH - x - 1, HEIGHT - y - 1),
+                    xy=(WIDTH - x - 1, -y),
                     value=pixel_value
                 )
 
