@@ -7,7 +7,7 @@ from Tupper.tupper_constants import IMAGE_MODE, WIDTH, HEIGHT, \
 class TupperEncoder:
     def get_height(self, image_path: str) -> int:
         """
-        This method return code of the image using
+        This method returns code of the image using
         Tupper's formula
 
         :param: image_path - Path of the image
